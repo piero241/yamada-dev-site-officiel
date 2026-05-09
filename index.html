@@ -3,521 +3,314 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Yamada Dev | Formation Complète – Devenez Expert Web, Bots & Hacking</title>
+  <title>Yamada Dev – Formation</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0b0e16;
-      color: #eef2ff;
-      line-height: 1.5;
-      scroll-behavior: smooth;
-    }
-
-    .glow-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 20% 30%, rgba(0, 255, 200, 0.08), transparent 70%),
-                  radial-gradient(circle at 80% 70%, rgba(156, 0, 255, 0.08), transparent 70%);
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-      flex-wrap: wrap;
-      gap: 16px;
-      border-bottom: 1px solid rgba(0, 255, 200, 0.2);
-    }
-
-    .logo h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #00ffc3, #b100ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-    }
-    .nav-links a {
-      color: #cbd5ff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.2s;
-    }
-    .nav-links a:hover {
-      color: #00ffc3;
-    }
-
-    .hero {
-      padding: 60px 0 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .badge {
-      background: rgba(0, 255, 200, 0.1);
-      border: 1px solid #00ffc3;
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #00ffc3;
-      display: inline-block;
-      margin-bottom: 24px;
-    }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(to right, #fff, #9effe0);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      max-width: 900px;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      color: #b9c7f0;
-      max-width: 700px;
-      margin: 24px auto;
-    }
-    .price-highlight {
-      background: #00ffc322;
-      display: inline-block;
-      padding: 8px 24px;
-      border-radius: 60px;
-      font-weight: 800;
-      font-size: 1.4rem;
-      margin-top: 10px;
-      backdrop-filter: blur(4px);
-    }
-    .section {
-      padding: 60px 0;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .section-title span {
-      background: linear-gradient(135deg, #00ffc3, #bc7eff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 35px;
-    }
-    .formation-card {
-      background: rgba(18, 24, 38, 0.8);
-      backdrop-filter: blur(4px);
-      border-radius: 36px;
-      padding: 30px 24px;
-      border: 1px solid rgba(0, 255, 200, 0.25);
-      transition: 0.25s;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-    .formation-card:hover {
-      border-color: #00ffc3;
-      transform: translateY(-6px);
-      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5);
-    }
-    .card-badge {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      font-size: 0.7rem;
-      background: #00c49a30;
-      padding: 4px 12px;
-      border-radius: 30px;
-      color: #00ffc3;
-    }
-    .formation-card i {
-      font-size: 2.8rem;
-      color: #00ffc3;
-      margin-bottom: 20px;
-    }
-    .formation-card h3 {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-    }
-    .formation-card .price {
-      font-size: 2.2rem;
-      font-weight: 800;
-      margin: 15px 0 10px;
-      color: #f5f9ff;
-    }
-    .price small {
-      font-size: 0.9rem;
-      font-weight: 400;
-    }
-    .features-list {
-      margin: 20px 0;
-      list-style: none;
-      flex-grow: 1;
-    }
-    .features-list li {
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .features-list i.fa-check-circle {
-      color: #00ffc3;
-      font-size: 1rem;
-    }
-    .btn-wa {
-      background: linear-gradient(95deg, #25D366, #128C7E);
-      border: none;
-      padding: 14px 0;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1rem;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-      margin-top: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-    }
-    .btn-wa:hover {
-      filter: brightness(1.05);
-      transform: scale(0.98);
-    }
-    .pdf-preview {
-      background: #0f1322;
-      border-radius: 32px;
-      padding: 30px;
-      margin-top: 30px;
-      text-align: center;
-    }
-    .pdf-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .pdf-item {
-      background: #1a1f30;
-      border-radius: 20px;
-      padding: 20px;
-      width: 200px;
-      text-align: center;
-      transition: 0.2s;
-    }
-    .pdf-item i {
-      font-size: 2.5rem;
-      color: #ff4d4d;
-    }
-    footer {
-      text-align: center;
-      padding: 40px 0;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      color: #6c7aa3;
-    }
-    @media (max-width: 700px) {
-      .hero h1 { font-size: 2rem; }
-      .navbar { flex-direction: column; }
-      .section-title { font-size: 1.8rem; }
-    }
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-top: 20px;
-    }
-    .portfolio-card {
-      background: #0f1321;
-      border-radius: 28px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(0, 255, 200, 0.2);
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .portfolio-card:hover {
-      transform: translateY(-8px);
-      border-color: #00ffc3;
-      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.6);
-    }
-    .portfolio-img {
-      height: 160px;
-      background: linear-gradient(135deg, #0b1425, #0a0f1c);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      color: #00ffc3;
-      border-bottom: 1px solid rgba(0,255,200,0.2);
-    }
-    .portfolio-info {
-      padding: 20px;
-    }
-    .portfolio-info h3 {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-    }
-    .portfolio-info p {
-      color: #9aa7cc;
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-    }
-    .tech-badge {
-      display: inline-block;
-      background: rgba(0,255,200,0.1);
-      padding: 4px 10px;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      color: #00ffc3;
-    }
-    .revenue-stats {
-      background: linear-gradient(95deg, #00c49a20, #a13eff20);
-      border-radius: 36px;
-      padding: 30px;
-      text-align: center;
-      margin: 40px 0 20px;
-      border: 1px solid rgba(0,255,200,0.3);
-    }
-    .revenue-number {
-      font-size: 3rem;
-      font-weight: 800;
-      color: #00ffc3;
-      margin: 10px 0;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0b0e16; color: #eef2ff; line-height: 1.5; }
+    .glow-bg { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 20% 30%, rgba(0,255,200,0.08), transparent 70%), radial-gradient(circle at 80% 70%, rgba(156,0,255,0.08), transparent 70%); pointer-events: none; z-index:-2; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(0,255,200,0.2); }
+    .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #00ffc3, #b100ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { color: #cbd5ff; text-decoration: none; font-weight: 500; transition: 0.2s; }
+    .nav-links a:hover { color: #00ffc3; }
+    .hero { padding: 60px 0 40px; text-align: center; }
+    .badge { background: rgba(0,255,200,0.1); border: 1px solid #00ffc3; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; color: #00ffc3; display: inline-block; margin-bottom: 24px; }
+    .hero h1 { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #fff, #9effe0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { font-size: 1.2rem; color: #b9c7f0; max-width: 700px; margin: 24px auto; }
+    .price-highlight { background: #00ffc322; display: inline-block; padding: 8px 24px; border-radius: 60px; font-weight: 800; font-size: 1.4rem; margin-top: 10px; backdrop-filter: blur(4px); }
+    .section { padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 50px; }
+    .section-title span { background: linear-gradient(135deg, #00ffc3, #bc7eff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px; }
+    .formation-card { background: rgba(18,24,38,0.8); backdrop-filter: blur(4px); border-radius: 36px; padding: 30px 24px; border: 1px solid rgba(0,255,200,0.25); transition: 0.25s; display: flex; flex-direction: column; position: relative; }
+    .formation-card:hover { border-color: #00ffc3; transform: translateY(-6px); }
+    .card-badge { position: absolute; top: 16px; right: 20px; font-size: 0.7rem; background: #00c49a30; padding: 4px 12px; border-radius: 30px; color: #00ffc3; }
+    .formation-card i { font-size: 2.8rem; color: #00ffc3; margin-bottom: 20px; }
+    .formation-card h3 { font-size: 1.8rem; margin-bottom: 12px; }
+    .formation-card .price { font-size: 2.2rem; font-weight: 800; margin: 15px 0 10px; }
+    .price small { font-size: 0.9rem; font-weight: 400; }
+    .features-list { margin: 20px 0; list-style: none; flex-grow: 1; }
+    .features-list li { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+    .features-list i.fa-check-circle { color: #00ffc3; }
+    .btn-wa { background: linear-gradient(95deg, #25D366, #128C7E); border: none; padding: 14px 0; border-radius: 50px; font-weight: 700; font-size: 1rem; color: white; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+    .btn-wa:hover { filter: brightness(1.05); transform: scale(0.98); }
+    .pdf-preview { background: #0f1322; border-radius: 32px; padding: 30px; margin-top: 30px; text-align: center; }
+    .pdf-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .pdf-item { background: #1a1f30; border-radius: 20px; padding: 20px; width: 200px; text-align: center; }
+    .pdf-item i { font-size: 2.5rem; color: #ff4d4d; }
+    footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); color: #6c7aa3; }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 20px; }
+    .portfolio-card { background: #0f1321; border-radius: 28px; overflow: hidden; border: 1px solid rgba(0,255,200,0.2); text-decoration: none; color: inherit; }
+    .portfolio-card:hover { transform: translateY(-8px); border-color: #00ffc3; }
+    .portfolio-img { height: 160px; background: linear-gradient(135deg, #0b1425, #0a0f1c); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #00ffc3; }
+    .portfolio-info { padding: 20px; }
+    .revenue-stats { background: linear-gradient(95deg, #00c49a20, #a13eff20); border-radius: 36px; padding: 30px; text-align: center; margin: 40px 0; border: 1px solid rgba(0,255,200,0.3); }
+    .revenue-number { font-size: 3rem; font-weight: 800; color: #00ffc3; margin: 10px 0; }
+    .auth-container { max-width: 450px; margin: 100px auto; background: #0f1321; border-radius: 36px; padding: 40px 30px; border: 1px solid rgba(0,255,200,0.3); text-align: center; }
+    .auth-container input { width: 100%; padding: 14px; margin: 10px 0; border-radius: 40px; border: none; background: #1e2638; color: white; }
+    .auth-container button { background: #00ffc3; color: #0a0e18; border: none; padding: 14px; border-radius: 40px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
+    .auth-container a { color: #00ffc3; text-decoration: none; }
+    .error { color: #ff6b6b; font-size: 0.8rem; margin-top: 10px; }
+    .switch-link { margin-top: 20px; display: block; }
+    .site-content { display: none; }
+    @media (max-width: 700px) { .hero h1 { font-size: 2rem; } }
   </style>
 </head>
 <body>
 <div class="glow-bg"></div>
 
-<div class="container">
-  <nav class="navbar">
-    <div class="logo">
-      <h1>⚡ YAMADA DEV</h1>
-    </div>
-    <div class="nav-links">
-      <a href="#formations">Formations</a>
-      <a href="#contenu">Contenu PDF</a>
-      <a href="#portfolio">Réalisations</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </nav>
+<div id="authContainer" class="auth-container">
+  <div id="loginPanel">
+    <h2>🔐 Connexion</h2>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
+    <input type="password" id="loginPassword" placeholder="Mot de passe">
+    <button id="loginBtn">Se connecter</button>
+    <div id="loginError" class="error"></div>
+    <div class="switch-link">Pas encore inscrit ? <a href="#" id="showSignupLink">Créer un compte</a></div>
+  </div>
+  <div id="signupPanel" style="display:none;">
+    <h2>📝 Inscription</h2>
+    <input type="text" id="signupName" placeholder="Nom complet">
+    <input type="email" id="signupEmail" placeholder="Email">
+    <input type="password" id="signupPassword" placeholder="Mot de passe (min 6 caractères)">
+    <label style="display:flex; align-items:center; gap:10px; margin:15px 0;">
+      <input type="checkbox" id="isStudent"> Je suis élève (bénéficie des tarifs réduits)
+    </label>
+    <button id="signupBtn">S'inscrire</button>
+    <div id="signupError" class="error"></div>
+    <div class="switch-link">Déjà un compte ? <a href="#" id="showLoginLink">Se connecter</a></div>
+  </div>
+</div>
 
-  <section class="hero">
-    <div class="badge"><i class="fab fa-whatsapp"></i> Paiement sécurisé via Mobile Money / WhatsApp</div>
-    <h1>Formations de développeur, bots & hacking éthique</h1>
-    <p>Choisissez votre voie : <strong>Bots, Bug Bounty ou la totale</strong>. Recevez le PDF complet après paiement. Gagnez votre argent sans dépendre de personne.</p>
-    <div class="price-highlight">
-      🔥 Formations à partir de <strong>15 500 FCFA</strong> 🔥
-    </div>
-  </section>
+<div id="siteContent" class="site-content">
+  <div class="container">
+    <nav class="navbar">
+      <div class="logo"><h1>⚡ YAMADA DEV</h1></div>
+      <div class="nav-links">
+        <a href="#formations">Formations</a>
+        <a href="#contenu">Contenu PDF</a>
+        <a href="#portfolio">Réalisations</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
 
-  <section class="section" id="formations">
-    <div class="section-title">Choisissez votre formation <span>Yamada Dev</span></div>
-    <div class="cards-grid">
-      
-      <div class="formation-card">
-        <div class="card-badge">⭐ POPULAIRE</div>
-        <i class="fas fa-robot"></i>
-        <h3>Formation Bot</h3>
-        <div class="price">15 500 <small>FCFA</small></div>
-        <ul class="features-list">
-          <li><i class="fas fa-check-circle"></i> Création de bots Discord & Telegram</li>
-          <li><i class="fas fa-check-circle"></i> Automatisation Web (scraping, trading)</li>
-          <li><i class="fas fa-check-circle"></i> Hébergement 24/7 & API</li>
-          <li><i class="fas fa-check-circle"></i> PDF complet + exemples de codes</li>
-          <li><i class="fas fa-check-circle"></i> Monétisation des bots (revenus passifs)</li>
-        </ul>
-        <button class="btn-wa" data-formation="Formation BOT" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION BOT (création de bots) au prix de 15 500 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !">
-          <i class="fab fa-whatsapp"></i> Acheter via WhatsApp
-        </button>
-      </div>
-      
-      <div class="formation-card">
-        <div class="card-badge">🐞 NOUVEAU</div>
-        <i class="fas fa-bug"></i>
-        <h3>Formation Bug Bot</h3>
-        <div class="price">17 000 <small>FCFA</small></div>
-        <ul class="features-list">
-          <li><i class="fas fa-check-circle"></i> Introduction au Bug Bounty & Hacking Éthique</li>
-          <li><i class="fas fa-check-circle"></i> Découverte de failles (XSS, SQLi, CSRF)</li>
-          <li><i class="fas fa-check-circle"></i> Utilisation de Burp Suite, Kali Linux</li>
-          <li><i class="fas fa-check-circle"></i> Techniques de report & gagner de l'argent sur les plateformes</li>
-          <li><i class="fas fa-check-circle"></i> PDF chapitre dédié + outils pratiques</li>
-        </ul>
-        <button class="btn-wa" data-formation="Formation Bug Bot" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION BUG BOT (hacking éthique & bug bounty) au prix de 17 000 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !">
-          <i class="fab fa-whatsapp"></i> Acheter via WhatsApp
-        </button>
-      </div>
-      
-      <div class="formation-card">
-        <div class="card-badge">🏆 COMPLET</div>
-        <i class="fas fa-crown"></i>
-        <h3>Formation Total</h3>
-        <div class="price">25 000 <small>FCFA</small></div>
-        <ul class="features-list">
-          <li><i class="fas fa-check-circle"></i> Accès aux deux formations : BOT + BUG BOT</li>
-          <li><i class="fas fa-check-circle"></i> Double PDF : Création de bots & Hacking éthique</li>
-          <li><i class="fas fa-check-circle"></i> Bonus : Scripts avancés & astuces hacker</li>
-          <li><i class="fas fa-check-circle"></i> Communauté privée & updates à vie</li>
-          <li><i class="fas fa-check-circle"></i> Devenez un développeur redoutable et indépendant</li>
-        </ul>
-        <button class="btn-wa" data-formation="Formation TOTAL" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION TOTAL (BOT + BUG BOT) au prix de 25 000 FCFA. Veuillez me donner les instructions de paiement et m'envoyer les deux PDF et le bonus. Merci !">
-          <i class="fab fa-whatsapp"></i> Acheter via WhatsApp
-        </button>
-      </div>
-    </div>
-    <p style="text-align: center; margin-top: 35px; font-size: 0.9rem; color:#9aa7d4;"><i class="fas fa-shield-alt"></i> Paiement sécurisé. Après validation, vous recevez immédiatement le(s) PDF(s) sur WhatsApp. Contact direct +241077335574</p>
-  </section>
+    <section class="hero">
+      <div class="badge"><i class="fab fa-whatsapp"></i> Paiement sécurisé via Mobile Money / WhatsApp</div>
+      <h1>Formations de développeur, bots & hacking éthique</h1>
+      <p>Choisissez votre voie : <strong>Bots, Bug Bounty ou la totale</strong>. Recevez le PDF complet après paiement. Gagnez votre argent sans dépendre de personne.</p>
+      <div class="price-highlight" id="priceHighlight">🔥 Formations à partir de <strong>13 000 FCFA</strong> (tarif élève) 🔥</div>
+    </section>
 
-  <section class="section" id="contenu">
-    <div class="section-title">Contenu des <span>PDF de formation</span> (créés par Yamada Dev)</div>
-    <div class="pdf-preview">
-      <p style="margin-bottom: 20px;"><strong>📚 Des supports complets, prêts à être envoyés après achat.</strong> Chaque PDF est rédigé avec soin, contient des exemples pratiques, des codes exploitables et des stratégies pour gagner de l'argent dès la première semaine.</p>
-      <div class="pdf-grid">
-        <div class="pdf-item">
-          <i class="fas fa-file-pdf"></i>
-          <h4>PDF Bot Master</h4>
-          <p>180+ pages : Discord.js, Telegram bots, automation, monétisation.</p>
+    <section class="section" id="formations">
+      <div class="section-title">Choisissez votre formation <span>Yamada Dev</span></div>
+      <div class="cards-grid">
+        <div class="formation-card">
+          <div class="card-badge">⭐ POPULAIRE</div>
+          <i class="fas fa-robot"></i>
+          <h3>Formation Bot</h3>
+          <div class="price" id="prixBotDisplay">15 500 <small>FCFA</small></div>
+          <ul class="features-list">
+            <li><i class="fas fa-check-circle"></i> Création de bots Discord & Telegram</li>
+            <li><i class="fas fa-check-circle"></i> Automatisation Web (scraping, trading)</li>
+            <li><i class="fas fa-check-circle"></i> Hébergement 24/7 & API</li>
+            <li><i class="fas fa-check-circle"></i> PDF complet + exemples de codes</li>
+            <li><i class="fas fa-check-circle"></i> Monétisation des bots (revenus passifs)</li>
+          </ul>
+          <button class="btn-wa" data-formation="Bot" data-price="15500">Acheter via WhatsApp</button>
         </div>
-        <div class="pdf-item">
-          <i class="fas fa-file-pdf"></i>
-          <h4>PDF Bug Hunter</h4>
-          <p>150 pages : découverte de failles, Bug Bounty, rapports professionnels.</p>
+        <div class="formation-card">
+          <div class="card-badge">🐞 NOUVEAU</div>
+          <i class="fas fa-bug"></i>
+          <h3>Formation Bug Bot</h3>
+          <div class="price" id="prixBugDisplay">17 000 <small>FCFA</small></div>
+          <ul class="features-list">
+            <li><i class="fas fa-check-circle"></i> Introduction au Bug Bounty & Hacking Éthique</li>
+            <li><i class="fas fa-check-circle"></i> Découverte de failles (XSS, SQLi, CSRF)</li>
+            <li><i class="fas fa-check-circle"></i> Utilisation de Burp Suite, Kali Linux</li>
+            <li><i class="fas fa-check-circle"></i> Techniques de report & gagner de l'argent</li>
+            <li><i class="fas fa-check-circle"></i> PDF chapitre dédié + outils pratiques</li>
+          </ul>
+          <button class="btn-wa" data-formation="Bug Bot" data-price="17000">Acheter via WhatsApp</button>
         </div>
-        <div class="pdf-item">
-          <i class="fas fa-file-pdf"></i>
-          <h4>Bonus Scripts</h4>
-          <p>Offert avec la formation Total : 15 scripts prêts à l'emploi + outils.</p>
+        <div class="formation-card">
+          <div class="card-badge">🏆 COMPLET</div>
+          <i class="fas fa-crown"></i>
+          <h3>Formation Total</h3>
+          <div class="price" id="prixTotalDisplay">25 000 <small>FCFA</small></div>
+          <ul class="features-list">
+            <li><i class="fas fa-check-circle"></i> Accès aux deux formations : BOT + BUG BOT</li>
+            <li><i class="fas fa-check-circle"></i> Double PDF : Création de bots & Hacking éthique</li>
+            <li><i class="fas fa-check-circle"></i> Bonus : Scripts avancés & astuces hacker</li>
+            <li><i class="fas fa-check-circle"></i> Communauté privée & updates à vie</li>
+            <li><i class="fas fa-check-circle"></i> Devenez un développeur redoutable</li>
+          </ul>
+          <button class="btn-wa" data-formation="Total" data-price="25000">Acheter via WhatsApp</button>
         </div>
       </div>
-      <p style="margin-top: 25px;"><i class="fas fa-check-circle" style="color:#00ffc3;"></i> Tous les PDF sont créés par Yamada Dev – mise à jour régulière. Après votre paiement, vous les recevez directement sur WhatsApp.</p>
-    </div>
-  </section>
+      <p style="text-align:center; margin-top:35px;"><i class="fas fa-shield-alt"></i> Après validation du paiement, vous recevez le(s) PDF sur WhatsApp.</p>
+    </section>
 
-  <section class="section" id="portfolio">
-    <div class="section-title">Nos <span>réalisations</span> – Preuve par l'exemple</div>
-    <div class="revenue-stats">
-      <i class="fas fa-chart-line" style="font-size: 2rem; color:#00ffc3;"></i>
-      <h3 style="margin: 15px 0;">Chiffre d'affaires généré grâce au développement</h3>
-      <div class="revenue-number">315 000 FCFA</div>
-      <p>📈 toutes les 3 semaines grâce à nos projets web, bots et solutions sur mesure</p>
-      <p style="font-size: 0.9rem; margin-top: 15px;">Des clients satisfaits au Gabon et à l'international</p>
-    </div>
-    <div class="portfolio-grid">
-      <a href="https://piero241.github.io/yamada-dev/" target="_blank" class="portfolio-card">
-        <div class="portfolio-img"><i class="fas fa-code"></i></div>
-        <div class="portfolio-info">
-          <h3>Yamada Dev – Agence digitale</h3>
-          <p>Site vitrine de mon agence de développement.</p>
-          <span class="tech-badge">HTML/CSS/JS</span>
+    <section class="section" id="contenu">
+      <div class="section-title">Contenu des <span>PDF de formation</span></div>
+      <div class="pdf-preview">
+        <div class="pdf-grid">
+          <div class="pdf-item"><i class="fas fa-file-pdf"></i><h4>PDF Bot Master</h4><p>180+ pages</p></div>
+          <div class="pdf-item"><i class="fas fa-file-pdf"></i><h4>PDF Bug Hunter</h4><p>150+ pages</p></div>
+          <div class="pdf-item"><i class="fas fa-file-pdf"></i><h4>Bonus Scripts</h4><p>15 scripts</p></div>
         </div>
-      </a>
-      <a href="https://emmelia-chop.onrender.com/" target="_blank" class="portfolio-card">
-        <div class="portfolio-img"><i class="fas fa-shopping-bag"></i></div>
-        <div class="portfolio-info">
-          <h3>Emmelia Shop – Boutique en ligne</h3>
-          <p>E-commerce vente de sacs, chaussures, etc.</p>
-          <span class="tech-badge">WhatsApp API</span>
-        </div>
-      </a>
-      <a href="https://piero241.github.io" target="_blank" class="portfolio-card">
-        <div class="portfolio-img"><i class="fas fa-perfume"></i></div>
-        <div class="portfolio-info">
-          <h3>BM.parfum.chop – Parfumerie</h3>
-          <p>Vente de parfums haut de gamme gabonais.</p>
-          <span class="tech-badge">Landing page</span>
-        </div>
-      </a>
-    </div>
-  </section>
+      </div>
+    </section>
 
-  <section class="section" id="contact">
-    <div class="section-title">Contact <span>et support</span></div>
-    <div style="max-width: 550px; margin: 0 auto; background:#101624; border-radius: 40px; padding: 30px; text-align: center;">
-      <i class="fab fa-whatsapp" style="font-size: 3rem; color:#25D366;"></i>
-      <h3 style="margin: 15px 0;">Discutez directement avec Yamada</h3>
-      <p style="margin-bottom: 15px;">Pour toute question, ou commander manuellement :</p>
-      <a href="https://wa.me/241077335574?text=Bonjour%20Yamada%20Dev%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20vos%20formations%20(15%20500%20%E2%82%AC%20?%20FCFA).%20Pouvez-vous%20me%20guider%20%3F" target="_blank" style="background: #25D366; display: inline-block; padding: 12px 28px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin-top: 10px;"><i class="fab fa-whatsapp"></i> Contacter +241077335574</a>
-      <p style="margin-top: 20px; font-size: 0.8rem;">Nos formations : Bot 15 500 FCFA | Bug Bot 17 000 FCFA | Total 25 000 FCFA. Paiement sécurisé.</p>
-    </div>
-  </section>
+    <section class="section" id="portfolio">
+      <div class="section-title">Nos <span>réalisations</span> – Preuve par l'exemple</div>
+      <div class="revenue-stats">
+        <i class="fas fa-chart-line" style="font-size:2rem;color:#00ffc3;"></i>
+        <h3>Chiffre d'affaires généré</h3>
+        <div class="revenue-number">315 000 FCFA</div>
+        <p>toutes les 3 semaines</p>
+      </div>
+      <div class="portfolio-grid">
+        <a href="https://piero241.github.io/yamada-dev/" target="_blank" class="portfolio-card"><div class="portfolio-img"><i class="fas fa-code"></i></div><div class="portfolio-info"><h3>Yamada Dev – Agence</h3></div></a>
+        <a href="https://emmelia-chop.onrender.com/" target="_blank" class="portfolio-card"><div class="portfolio-img"><i class="fas fa-shopping-bag"></i></div><div class="portfolio-info"><h3>Emmelia Shop</h3></div></a>
+        <a href="https://piero241.github.io" target="_blank" class="portfolio-card"><div class="portfolio-img"><i class="fas fa-perfume"></i></div><div class="portfolio-info"><h3>Parfumerie BM</h3></div></a>
+      </div>
+    </section>
 
-  <footer>
-    <p>© 2025 Yamada Dev – Formations professionnelles | Devenez indépendant financièrement.</p>
-    <p style="margin-top: 8px;">📧 Contact officiel : WhatsApp +241077335574</p>
-  </footer>
+    <section class="section" id="contact">
+      <div style="max-width:550px; margin:0 auto; background:#101624; border-radius:40px; padding:30px; text-align:center;">
+        <i class="fab fa-whatsapp" style="font-size:3rem; color:#25D366;"></i>
+        <h3>Contactez Yamada</h3>
+        <a href="https://wa.me/241077335574" target="_blank" style="background:#25D366; display:inline-block; padding:12px 28px; border-radius:50px; text-decoration:none; color:white; font-weight:bold; margin-top:15px;">WhatsApp +241077335574</a>
+      </div>
+    </section>
+
+    <footer><p>© 2025 Yamada Dev – Formations professionnelles</p></footer>
+  </div>
 </div>
 
 <script>
-  const whatsappButtons = document.querySelectorAll('.btn-wa');
-  const PHONE_NUMBER = '241077335574';
-  
-  whatsappButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      e.preventDefault();
-      let customMessage = button.getAttribute('data-message');
-      const formationName = button.getAttribute('data-formation') || 'Formation Yamada Dev';
-      if (!customMessage) {
-        customMessage = `Bonjour Yamada Dev, je souhaite acheter la ${formationName}. Veuillez me donner les instructions de paiement et m'envoyer le(s) PDF. Merci !`;
+  const firebaseConfig = {
+    apiKey: "AIzaSyCrIFVX2OchRGvyS2AUHpdggZoroKnlt8o",
+    authDomain: "yamada-dev-officiel.firebaseapp.com",
+    projectId: "yamada-dev-officiel",
+    storageBucket: "yamada-dev-officiel.firebasestorage.app",
+    messagingSenderId: "799279893743",
+    appId: "1:799279893743:web:283f5de988f3aa14a85f1a",
+    measurementId: "G-0TH6W140PK"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const authContainer = document.getElementById('authContainer');
+  const siteContent = document.getElementById('siteContent');
+  const loginPanel = document.getElementById('loginPanel');
+  const signupPanel = document.getElementById('signupPanel');
+
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      const docRef = db.collection('users').doc(user.uid);
+      const doc = await docRef.get();
+      let estEtudiant = false;
+      if (doc.exists) {
+        estEtudiant = doc.data().estEtudiant || false;
+      } else {
+        await docRef.set({ email: user.email, estEtudiant: false, dateInscription: new Date() });
       }
-      const encodedMessage = encodeURIComponent(customMessage);
-      const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${encodedMessage}`;
-      window.open(whatsappUrl, '_blank');
-    });
+      updatePrices(estEtudiant);
+      authContainer.style.display = 'none';
+      siteContent.style.display = 'block';
+      await db.collection('logs').add({ email: user.email, action: 'connexion', date: new Date(), uid: user.uid });
+    } else {
+      authContainer.style.display = 'block';
+      siteContent.style.display = 'none';
+      loginPanel.style.display = 'block';
+      signupPanel.style.display = 'none';
+    }
   });
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
+  function updatePrices(estEtudiant) {
+    const prixBot = document.getElementById('prixBotDisplay');
+    const prixBug = document.getElementById('prixBugDisplay');
+    const prixTotal = document.getElementById('prixTotalDisplay');
+    const highlight = document.getElementById('priceHighlight');
+    if (estEtudiant) {
+      prixBot.innerHTML = '13 000 <small>FCFA</small>';
+      prixBug.innerHTML = '15 000 <small>FCFA</small>';
+      prixTotal.innerHTML = '22 000 <small>FCFA</small>';
+      highlight.innerHTML = '🔥 Tarif élève : Formation Bot 13 000 FCFA | Bug Bot 15 000 FCFA | Total 22 000 FCFA 🔥';
+      document.querySelectorAll('.btn-wa').forEach(btn => {
+        const f = btn.getAttribute('data-formation');
+        if (f === 'Bot') btn.setAttribute('data-price', '13000');
+        else if (f === 'Bug Bot') btn.setAttribute('data-price', '15000');
+        else if (f === 'Total') btn.setAttribute('data-price', '22000');
+      });
+    } else {
+      prixBot.innerHTML = '15 500 <small>FCFA</small>';
+      prixBug.innerHTML = '17 000 <small>FCFA</small>';
+      prixTotal.innerHTML = '25 000 <small>FCFA</small>';
+      highlight.innerHTML = '🔥 Formations à partir de <strong>15 500 FCFA</strong> (prix public) 🔥';
+      document.querySelectorAll('.btn-wa').forEach(btn => {
+        const f = btn.getAttribute('data-formation');
+        if (f === 'Bot') btn.setAttribute('data-price', '15500');
+        else if (f === 'Bug Bot') btn.setAttribute('data-price', '17000');
+        else if (f === 'Total') btn.setAttribute('data-price', '25000');
+      });
+    }
+  }
 
-  document.querySelectorAll('.formation-card, .pdf-item, .portfolio-card, .revenue-stats').forEach((el) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'all 0.5s ease-out';
-    observer.observe(el);
+  document.getElementById('signupBtn').onclick = async () => {
+    const nom = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const pwd = document.getElementById('signupPassword').value;
+    const estEtudiant = document.getElementById('isStudent').checked;
+    const errorDiv = document.getElementById('signupError');
+    if (!nom || !email || pwd.length < 6) {
+      errorDiv.innerText = "Remplissez tous les champs (mot de passe ≥6 caractères).";
+      return;
+    }
+    try {
+      const cred = await auth.createUserWithEmailAndPassword(email, pwd);
+      await db.collection('users').doc(cred.user.uid).set({ nom, email, estEtudiant, dateInscription: new Date() });
+      await db.collection('logs').add({ email, action: 'inscription', estEtudiant, date: new Date(), uid: cred.user.uid });
+    } catch (err) {
+      errorDiv.innerText = err.message;
+    }
+  };
+
+  document.getElementById('loginBtn').onclick = async () => {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pwd = document.getElementById('loginPassword').value;
+    const errorDiv = document.getElementById('loginError');
+    if (!email || !pwd) {
+      errorDiv.innerText = "Email et mot de passe requis.";
+      return;
+    }
+    try {
+      await auth.signInWithEmailAndPassword(email, pwd);
+    } catch (err) {
+      errorDiv.innerText = err.message;
+    }
+  };
+
+  document.getElementById('showSignupLink').onclick = (e) => { e.preventDefault(); loginPanel.style.display = 'none'; signupPanel.style.display = 'block'; };
+  document.getElementById('showLoginLink').onclick = (e) => { e.preventDefault(); signupPanel.style.display = 'none'; loginPanel.style.display = 'block'; };
+
+  const phoneNumber = '241077335574';
+  document.querySelectorAll('.btn-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const formation = btn.getAttribute('data-formation');
+      const price = btn.getAttribute('data-price');
+      const msg = `Bonjour Yamada Dev, je souhaite acheter la formation ${formation} au prix de ${price} FCFA. Veuillez me guider pour le paiement et m'envoyer le PDF. Merci !`;
+      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+    });
   });
 </script>
 </body>
