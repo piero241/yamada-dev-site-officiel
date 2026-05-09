@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Yamada Dev</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { background: #0b0e16; color: #eef2ff; font-family: monospace; padding: 20px; }
+    h1 { color: #00ffc3; }
+    .log-entry { background: #1a1f30; margin: 8px 0; padding: 12px; border-radius: 12px; border-left: 4px solid #00ffc3; }
+    .login-box { max-width: 400px; margin: 100px auto; background: #0f1321; padding: 30px; border-radius: 24px; text-align: center; }
+    input, button { padding: 12px; margin: 10px 0; width: 100%; border-radius: 40px; border: none; }
+    button { background: #00ffc3; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div id="adminArea">
+  <h1>📊 Tableau de bord – Notifications en direct</h1>
+  <div id="notifications">Connexion en cours...</div>
+</div>
+<div id="loginArea" class="login-box" style="display:none;">
+  <h2>Accès administrateur</h2>
+  <input type="email" id="adminEmail" placeholder="Email">
+  <input type="password" id="adminPassword" placeholder="Mot de passe">
+  <button id="adminLoginBtn">Se connecter</button>
+  <div id="adminError" style="color:red;"></div>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCrIFVX2OchRGvyS2AUHpdggZoroKnlt8o",
+    authDomain: "yamada-dev-officiel.firebaseapp.com",
+    projectId: "yamada-dev-officiel",
+    storageBucket: "yamada-dev-officiel.firebasestorage.app",
+    messagingSenderId: "799279893743",
+    appId: "1:799279893743:web:283f5de988f3aa14a85f1a",
+    measurementId: "G-0TH6W140PK"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const adminEmailAutorise = "rp850788@gmail.com"; // Ton email admin
+
+  function showLogin() {
+    document.getElementById('adminArea').style.display = 'none';
+    document.getElementById('loginArea').style.display = 'block';
+  }
+
+  auth.onAuthStateChanged(async (user) => {
+    if (user && user.email === adminEmailAutorise) {
+      document.getElementById('loginArea').style.display = 'none';
+      document.getElementById('adminArea').style.display = 'block';
+      db.collection('logs').orderBy('date', 'desc').limit(50).onSnapshot(snapshot => {
+        const container = document.getElementById('notifications');
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const date = data.date ? data.date.toDate().toLocaleString() : 'Date inconnue';
+          const div = document.createElement('div');
+          div.className = 'log-entry';
+          div.innerHTML = `<strong>${date}</strong> – ${data.action} – ${data.email}${data.estEtudiant ? ' (élève)' : ''}`;
+          container.appendChild(div);
+        });
+      });
+    } else if (user && user.email !== adminEmailAutorise) {
+      document.getElementById('adminError').innerText = "Cet email n'est pas autorisé.";
+      await auth.signOut();
+      showLogin();
+    } else {
+      showLogin();
+    }
+  });
+
+  document.getElementById('adminLoginBtn').onclick = async () => {
+    const email = document.getElementById('adminEmail').value;
+    const pwd = document.getElementById('adminPassword').value;
+    try {
+      await auth.signInWithEmailAndPassword(email, pwd);
+    } catch (err) {
+      document.getElementById('adminError').innerText = err.message;
+    }
+  };
+</script>
+</body>
+</html>
