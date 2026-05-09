@@ -16,9 +16,11 @@
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(0,255,200,0.2); }
     .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #00ffc3, #b100ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .nav-links { display: flex; gap: 28px; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
     .nav-links a { color: #cbd5ff; text-decoration: none; font-weight: 500; transition: 0.2s; }
     .nav-links a:hover { color: #00ffc3; }
+    .logout-btn { background: #ff5e5e; padding: 6px 16px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: 0.2s; }
+    .logout-btn:hover { background: #ff3b3b; }
     .hero { padding: 60px 0 40px; text-align: center; }
     .badge { background: rgba(0,255,200,0.1); border: 1px solid #00ffc3; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; color: #00ffc3; display: inline-block; margin-bottom: 24px; }
     .hero h1 { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #fff, #9effe0); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -65,6 +67,7 @@
 <body>
 <div class="glow-bg"></div>
 
+<!-- Formulaires d'authentification -->
 <div id="authContainer" class="auth-container">
   <div id="loginPanel">
     <h2>🔐 Connexion</h2>
@@ -80,7 +83,7 @@
     <input type="email" id="signupEmail" placeholder="Email">
     <input type="password" id="signupPassword" placeholder="Mot de passe (min 6 caractères)">
     <label style="display:flex; align-items:center; gap:10px; margin:15px 0;">
-      <input type="checkbox" id="isStudent"> Je suis élève (bénéficie des tarifs réduits)
+      <input type="checkbox" id="isStudent"> Je suis élève (tarifs réduits)
     </label>
     <button id="signupBtn">S'inscrire</button>
     <div id="signupError" class="error"></div>
@@ -88,6 +91,7 @@
   </div>
 </div>
 
+<!-- Contenu principal (caché tant que non connecté) -->
 <div id="siteContent" class="site-content">
   <div class="container">
     <nav class="navbar">
@@ -97,6 +101,7 @@
         <a href="#contenu">Contenu PDF</a>
         <a href="#portfolio">Réalisations</a>
         <a href="#contact">Contact</a>
+        <span id="logoutBtn" class="logout-btn">🚪 Déconnexion</span>
       </div>
     </nav>
 
@@ -110,6 +115,7 @@
     <section class="section" id="formations">
       <div class="section-title">Choisissez votre formation <span>Yamada Dev</span></div>
       <div class="cards-grid">
+        <!-- Formation Bot -->
         <div class="formation-card">
           <div class="card-badge">⭐ POPULAIRE</div>
           <i class="fas fa-robot"></i>
@@ -124,6 +130,7 @@
           </ul>
           <button class="btn-wa" data-formation="Bot" data-price="15500">Acheter via WhatsApp</button>
         </div>
+        <!-- Formation Bug Bot -->
         <div class="formation-card">
           <div class="card-badge">🐞 NOUVEAU</div>
           <i class="fas fa-bug"></i>
@@ -138,6 +145,7 @@
           </ul>
           <button class="btn-wa" data-formation="Bug Bot" data-price="17000">Acheter via WhatsApp</button>
         </div>
+        <!-- Formation Total -->
         <div class="formation-card">
           <div class="card-badge">🏆 COMPLET</div>
           <i class="fas fa-crown"></i>
@@ -195,6 +203,7 @@
 </div>
 
 <script>
+  // ================= CONFIGURATION FIREBASE =================
   const firebaseConfig = {
     apiKey: "AIzaSyCrIFVX2OchRGvyS2AUHpdggZoroKnlt8o",
     authDomain: "yamada-dev-officiel.firebaseapp.com",
@@ -208,33 +217,33 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
+  // Éléments DOM
   const authContainer = document.getElementById('authContainer');
   const siteContent = document.getElementById('siteContent');
   const loginPanel = document.getElementById('loginPanel');
   const signupPanel = document.getElementById('signupPanel');
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      const docRef = db.collection('users').doc(user.uid);
-      const doc = await docRef.get();
-      let estEtudiant = false;
-      if (doc.exists) {
-        estEtudiant = doc.data().estEtudiant || false;
-      } else {
-        await docRef.set({ email: user.email, estEtudiant: false, dateInscription: new Date() });
-      }
-      updatePrices(estEtudiant);
-      authContainer.style.display = 'none';
-      siteContent.style.display = 'block';
-      await db.collection('logs').add({ email: user.email, action: 'connexion', date: new Date(), uid: user.uid });
-    } else {
-      authContainer.style.display = 'block';
-      siteContent.style.display = 'none';
-      loginPanel.style.display = 'block';
-      signupPanel.style.display = 'none';
-    }
-  });
+  // ========== GESTION DE L'EXPIRATION DE SESSION (3 jours) ==========
+  async function setSessionExpiry(user, days = 3) {
+    const expiry = new Date();
+    expiry.setDate(expiry.getDate() + days);
+    await db.collection('users').doc(user.uid).update({
+      sessionExpiry: firebase.firestore.Timestamp.fromDate(expiry)
+    });
+  }
 
+  async function isSessionValid(user) {
+    const doc = await db.collection('users').doc(user.uid).get();
+    const data = doc.data();
+    if (data && data.sessionExpiry) {
+      const expiry = data.sessionExpiry.toDate();
+      const now = new Date();
+      return now <= expiry;
+    }
+    return true; // si pas d'expiration définie, on considère valide
+  }
+
+  // ========== MISE À JOUR DES PRIX SELON STATUT ÉLÈVE ==========
   function updatePrices(estEtudiant) {
     const prixBot = document.getElementById('prixBotDisplay');
     const prixBug = document.getElementById('prixBugDisplay');
@@ -265,6 +274,12 @@
     }
   }
 
+  // ========== DÉCONNEXION MANUELLE ==========
+  document.getElementById('logoutBtn').onclick = async () => {
+    await auth.signOut();
+  };
+
+  // ========== INSCRIPTION ==========
   document.getElementById('signupBtn').onclick = async () => {
     const nom = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
@@ -277,13 +292,22 @@
     }
     try {
       const cred = await auth.createUserWithEmailAndPassword(email, pwd);
-      await db.collection('users').doc(cred.user.uid).set({ nom, email, estEtudiant, dateInscription: new Date() });
-      await db.collection('logs').add({ email, action: 'inscription', estEtudiant, date: new Date(), uid: cred.user.uid });
+      // Définir l'expiration de session (3 jours)
+      const expiry = new Date();
+      expiry.setDate(expiry.getDate() + 3);
+      await db.collection('users').doc(cred.user.uid).set({
+        nom, email, estEtudiant, dateInscription: new Date(),
+        sessionExpiry: firebase.firestore.Timestamp.fromDate(expiry)
+      });
+      await db.collection('logs').add({
+        email, action: 'inscription', estEtudiant, date: new Date(), uid: cred.user.uid
+      });
     } catch (err) {
       errorDiv.innerText = err.message;
     }
   };
 
+  // ========== CONNEXION ==========
   document.getElementById('loginBtn').onclick = async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pwd = document.getElementById('loginPassword').value;
@@ -293,15 +317,67 @@
       return;
     }
     try {
-      await auth.signInWithEmailAndPassword(email, pwd);
+      const cred = await auth.signInWithEmailAndPassword(email, pwd);
+      // Mettre à jour l'expiration de session (3 jours)
+      await setSessionExpiry(cred.user, 3);
     } catch (err) {
       errorDiv.innerText = err.message;
     }
   };
 
-  document.getElementById('showSignupLink').onclick = (e) => { e.preventDefault(); loginPanel.style.display = 'none'; signupPanel.style.display = 'block'; };
-  document.getElementById('showLoginLink').onclick = (e) => { e.preventDefault(); signupPanel.style.display = 'none'; loginPanel.style.display = 'block'; };
+  // ========== SURVEILLANCE DE L'ÉTAT DE CONNEXION ==========
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      // Vérifier la validité de la session
+      const valid = await isSessionValid(user);
+      if (!valid) {
+        await auth.signOut();
+        alert("⏰ Votre session a expiré (3 jours). Veuillez vous reconnecter.");
+        return;
+      }
 
+      // Récupérer les données utilisateur
+      const docRef = db.collection('users').doc(user.uid);
+      const doc = await docRef.get();
+      let estEtudiant = false;
+      if (doc.exists) {
+        estEtudiant = doc.data().estEtudiant || false;
+      } else {
+        // Sécurité : si le document n'existe pas, le créer
+        await docRef.set({ email: user.email, estEtudiant: false, dateInscription: new Date() });
+      }
+      updatePrices(estEtudiant);
+      authContainer.style.display = 'none';
+      siteContent.style.display = 'block';
+      // Enregistrer la connexion dans les logs pour l'admin
+      await db.collection('logs').add({
+        email: user.email,
+        action: 'connexion',
+        date: new Date(),
+        uid: user.uid
+      });
+    } else {
+      authContainer.style.display = 'block';
+      siteContent.style.display = 'none';
+      // Réafficher le panneau de connexion
+      loginPanel.style.display = 'block';
+      signupPanel.style.display = 'none';
+    }
+  });
+
+  // ========== BASCULE ENTRE FORMULAIRES ==========
+  document.getElementById('showSignupLink').onclick = (e) => {
+    e.preventDefault();
+    loginPanel.style.display = 'none';
+    signupPanel.style.display = 'block';
+  };
+  document.getElementById('showLoginLink').onclick = (e) => {
+    e.preventDefault();
+    signupPanel.style.display = 'none';
+    loginPanel.style.display = 'block';
+  };
+
+  // ========== BOUTONS WHATSAPP AVEC LE BON PRIX ==========
   const phoneNumber = '241077335574';
   document.querySelectorAll('.btn-wa').forEach(btn => {
     btn.addEventListener('click', (e) => {
