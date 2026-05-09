@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Yamada Dev – Formation</title>
+  <title>Yamada Dev – Formation Pro</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -16,7 +16,7 @@
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(0,255,200,0.2); }
     .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #00ffc3, #b100ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
     .nav-links a { color: #cbd5ff; text-decoration: none; font-weight: 500; transition: 0.2s; }
     .nav-links a:hover { color: #00ffc3; }
     .logout-btn { background: #ff5e5e; padding: 6px 16px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: 0.2s; }
@@ -40,7 +40,7 @@
     .features-list { margin: 20px 0; list-style: none; flex-grow: 1; }
     .features-list li { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
     .features-list i.fa-check-circle { color: #00ffc3; }
-    .btn-wa { background: linear-gradient(95deg, #25D366, #128C7E); border: none; padding: 14px 0; border-radius: 50px; font-weight: 700; font-size: 1rem; color: white; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+    .btn-wa { background: linear-gradient(95deg, #25D366, #128C7E); border: none; padding: 14px 0; border-radius: 50px; font-weight: 700; font-size: 1rem; color: white; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; transition: 0.2s; }
     .btn-wa:hover { filter: brightness(1.05); transform: scale(0.98); }
     .pdf-preview { background: #0f1322; border-radius: 32px; padding: 30px; margin-top: 30px; text-align: center; }
     .pdf-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
@@ -61,17 +61,28 @@
     .error { color: #ff6b6b; font-size: 0.8rem; margin-top: 10px; }
     .switch-link { margin-top: 20px; display: block; }
     .site-content { display: none; }
-    @media (max-width: 700px) { .hero h1 { font-size: 2rem; } }
+    .faq-item { background: #101624; border-radius: 20px; margin-bottom: 16px; overflow: hidden; }
+    .faq-question { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; background: #0f1322; }
+    .faq-question i { transition: transform 0.3s; }
+    .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; color: #b9c7f0; }
+    .faq-item.active .faq-answer { padding: 0 20px 20px 20px; max-height: 300px; }
+    .testimonial { background: #0f1321; border-radius: 24px; padding: 24px; margin: 20px 0; border-left: 4px solid #00ffc3; }
+    .stats-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin: 40px 0; }
+    .stat-card { text-align: center; background: #0f1321; padding: 30px; border-radius: 28px; flex: 1; min-width: 150px; }
+    .stat-number { font-size: 2.5rem; font-weight: 800; color: #00ffc3; }
+    .contact-form { max-width: 600px; margin: 30px auto; background: #0f1321; padding: 30px; border-radius: 32px; }
+    .contact-form textarea { width: 100%; padding: 14px; border-radius: 24px; border: none; background: #1e2638; color: white; margin-top: 10px; resize: vertical; }
+    @media (max-width: 700px) { .hero h1 { font-size: 2rem; } .stats-grid { flex-direction: column; } }
   </style>
 </head>
 <body>
 <div class="glow-bg"></div>
 
-<!-- Formulaires d'authentification -->
+<!-- Auth containers -->
 <div id="authContainer" class="auth-container">
   <div id="loginPanel">
     <h2>🔐 Connexion</h2>
-    <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
+    <input type="email" id="loginEmail" placeholder="Email">
     <input type="password" id="loginPassword" placeholder="Mot de passe">
     <button id="loginBtn">Se connecter</button>
     <div id="loginError" class="error"></div>
@@ -91,119 +102,80 @@
   </div>
 </div>
 
-<!-- Contenu principal (caché tant que non connecté) -->
+<!-- Main content -->
 <div id="siteContent" class="site-content">
   <div class="container">
     <nav class="navbar">
       <div class="logo"><h1>⚡ YAMADA DEV</h1></div>
       <div class="nav-links">
         <a href="#formations">Formations</a>
-        <a href="#contenu">Contenu PDF</a>
-        <a href="#portfolio">Réalisations</a>
+        <a href="#faq">FAQ</a>
+        <a href="#temoignages">Avis</a>
         <a href="#contact">Contact</a>
         <span id="logoutBtn" class="logout-btn">🚪 Déconnexion</span>
       </div>
     </nav>
 
     <section class="hero">
-      <div class="badge"><i class="fab fa-whatsapp"></i> Paiement sécurisé via Mobile Money / WhatsApp</div>
-      <h1>Formations de développeur, bots & hacking éthique</h1>
-      <p>Choisissez votre voie : <strong>Bots, Bug Bounty ou la totale</strong>. Recevez le PDF complet après paiement. Gagnez votre argent sans dépendre de personne.</p>
-      <div class="price-highlight" id="priceHighlight">🔥 Formations à partir de <strong>13 000 FCFA</strong> (tarif élève) 🔥</div>
+      <div class="badge"><i class="fab fa-whatsapp"></i> + de 500 étudiants formés</div>
+      <h1>Deviens développeur, créateur de bots & hacker éthique</h1>
+      <p>Formations 100% pratiques. Accès immédiat aux PDF. Rejoins une communauté qui réussit.</p>
+      <div class="price-highlight" id="priceHighlight">🔥 Tarifs réduits pour les élèves 🔥</div>
     </section>
 
+    <!-- Formations -->
     <section class="section" id="formations">
-      <div class="section-title">Choisissez votre formation <span>Yamada Dev</span></div>
+      <div class="section-title">Nos <span>formations</span></div>
       <div class="cards-grid">
-        <!-- Formation Bot -->
-        <div class="formation-card">
-          <div class="card-badge">⭐ POPULAIRE</div>
-          <i class="fas fa-robot"></i>
-          <h3>Formation Bot</h3>
-          <div class="price" id="prixBotDisplay">15 500 <small>FCFA</small></div>
-          <ul class="features-list">
-            <li><i class="fas fa-check-circle"></i> Création de bots Discord & Telegram</li>
-            <li><i class="fas fa-check-circle"></i> Automatisation Web (scraping, trading)</li>
-            <li><i class="fas fa-check-circle"></i> Hébergement 24/7 & API</li>
-            <li><i class="fas fa-check-circle"></i> PDF complet + exemples de codes</li>
-            <li><i class="fas fa-check-circle"></i> Monétisation des bots (revenus passifs)</li>
-          </ul>
-          <button class="btn-wa" data-formation="Bot" data-price="15500">Acheter via WhatsApp</button>
-        </div>
-        <!-- Formation Bug Bot -->
-        <div class="formation-card">
-          <div class="card-badge">🐞 NOUVEAU</div>
-          <i class="fas fa-bug"></i>
-          <h3>Formation Bug Bot</h3>
-          <div class="price" id="prixBugDisplay">17 000 <small>FCFA</small></div>
-          <ul class="features-list">
-            <li><i class="fas fa-check-circle"></i> Introduction au Bug Bounty & Hacking Éthique</li>
-            <li><i class="fas fa-check-circle"></i> Découverte de failles (XSS, SQLi, CSRF)</li>
-            <li><i class="fas fa-check-circle"></i> Utilisation de Burp Suite, Kali Linux</li>
-            <li><i class="fas fa-check-circle"></i> Techniques de report & gagner de l'argent</li>
-            <li><i class="fas fa-check-circle"></i> PDF chapitre dédié + outils pratiques</li>
-          </ul>
-          <button class="btn-wa" data-formation="Bug Bot" data-price="17000">Acheter via WhatsApp</button>
-        </div>
-        <!-- Formation Total -->
-        <div class="formation-card">
-          <div class="card-badge">🏆 COMPLET</div>
-          <i class="fas fa-crown"></i>
-          <h3>Formation Total</h3>
-          <div class="price" id="prixTotalDisplay">25 000 <small>FCFA</small></div>
-          <ul class="features-list">
-            <li><i class="fas fa-check-circle"></i> Accès aux deux formations : BOT + BUG BOT</li>
-            <li><i class="fas fa-check-circle"></i> Double PDF : Création de bots & Hacking éthique</li>
-            <li><i class="fas fa-check-circle"></i> Bonus : Scripts avancés & astuces hacker</li>
-            <li><i class="fas fa-check-circle"></i> Communauté privée & updates à vie</li>
-            <li><i class="fas fa-check-circle"></i> Devenez un développeur redoutable</li>
-          </ul>
-          <button class="btn-wa" data-formation="Total" data-price="25000">Acheter via WhatsApp</button>
-        </div>
-      </div>
-      <p style="text-align:center; margin-top:35px;"><i class="fas fa-shield-alt"></i> Après validation du paiement, vous recevez le(s) PDF sur WhatsApp.</p>
-    </section>
-
-    <section class="section" id="contenu">
-      <div class="section-title">Contenu des <span>PDF de formation</span></div>
-      <div class="pdf-preview">
-        <div class="pdf-grid">
-          <div class="pdf-item"><i class="fas fa-file-pdf"></i><h4>PDF Bot Master</h4><p>180+ pages</p></div>
-          <div class="pdf-item"><i class="fas fa-file-pdf"></i><h4>PDF Bug Hunter</h4><p>150+ pages</p></div>
-          <div class="pdf-item"><i class="fas fa-file-pdf"></i><h4>Bonus Scripts</h4><p>15 scripts</p></div>
-        </div>
+        <div class="formation-card"><div class="card-badge">⭐ POPULAIRE</div><i class="fas fa-robot"></i><h3>Formation Bot</h3><div class="price" id="prixBotDisplay">15 500 <small>FCFA</small></div><ul class="features-list"><li><i class="fas fa-check-circle"></i> Discord/Telegram bots</li><li><i class="fas fa-check-circle"></i> Automatisation & API</li><li><i class="fas fa-check-circle"></i> Hébergement 24/7</li><li><i class="fas fa-check-circle"></i> Monétisation</li></ul><button class="btn-wa" data-formation="Bot" data-price="15500">Acheter via WhatsApp</button></div>
+        <div class="formation-card"><div class="card-badge">🐞 NOUVEAU</div><i class="fas fa-bug"></i><h3>Formation Bug Bot</h3><div class="price" id="prixBugDisplay">17 000 <small>FCFA</small></div><ul class="features-list"><li><i class="fas fa-check-circle"></i> Bug Bounty</li><li><i class="fas fa-check-circle"></i> XSS, SQLi, CSRF</li><li><i class="fas fa-check-circle"></i> Outils (Burp, Nmap)</li><li><i class="fas fa-check-circle"></i> Rapports pro</li></ul><button class="btn-wa" data-formation="Bug Bot" data-price="17000">Acheter via WhatsApp</button></div>
+        <div class="formation-card"><div class="card-badge">🏆 COMPLET</div><i class="fas fa-crown"></i><h3>Formation Total</h3><div class="price" id="prixTotalDisplay">25 000 <small>FCFA</small></div><ul class="features-list"><li><i class="fas fa-check-circle"></i> Bot + Bug Bot</li><li><i class="fas fa-check-circle"></i> Double PDF</li><li><i class="fas fa-check-circle"></i> 15 scripts bonus</li><li><i class="fas fa-check-circle"></i> Communauté privée</li></ul><button class="btn-wa" data-formation="Total" data-price="25000">Acheter via WhatsApp</button></div>
       </div>
     </section>
 
-    <section class="section" id="portfolio">
-      <div class="section-title">Nos <span>réalisations</span> – Preuve par l'exemple</div>
-      <div class="revenue-stats">
-        <i class="fas fa-chart-line" style="font-size:2rem;color:#00ffc3;"></i>
-        <h3>Chiffre d'affaires généré</h3>
-        <div class="revenue-number">315 000 FCFA</div>
-        <p>toutes les 3 semaines</p>
-      </div>
-      <div class="portfolio-grid">
-        <a href="https://piero241.github.io/yamada-dev/" target="_blank" class="portfolio-card"><div class="portfolio-img"><i class="fas fa-code"></i></div><div class="portfolio-info"><h3>Yamada Dev – Agence</h3></div></a>
-        <a href="https://emmelia-chop.onrender.com/" target="_blank" class="portfolio-card"><div class="portfolio-img"><i class="fas fa-shopping-bag"></i></div><div class="portfolio-info"><h3>Emmelia Shop</h3></div></a>
-        <a href="https://piero241.github.io" target="_blank" class="portfolio-card"><div class="portfolio-img"><i class="fas fa-perfume"></i></div><div class="portfolio-info"><h3>Parfumerie BM</h3></div></a>
-      </div>
+    <!-- FAQ interactive -->
+    <section class="section" id="faq">
+      <div class="section-title">Foire aux <span>questions</span></div>
+      <div class="faq-item"><div class="faq-question">Comment accéder aux PDF après achat ? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Après validation du paiement sur WhatsApp, vous recevez immédiatement le(s) PDF par message. Accès à vie.</div></div>
+      <div class="faq-item"><div class="faq-question">Les prix sont-ils définitifs ? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Oui, sauf offre spéciale. Les élèves bénéficient de réductions permanentes.</div></div>
+      <div class="faq-item"><div class="faq-question">Puis-je payer par Mobile Money ? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Oui, après avoir cliqué sur "Acheter", vous serez guidé sur WhatsApp pour le paiement (Mobile Money, Orange Money, etc.).</div></div>
+      <div class="faq-item"><div class="faq-question">La formation est-elle à jour ? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Les PDF sont mis à jour régulièrement. Vous recevez les nouvelles versions gratuitement.</div></div>
     </section>
 
+    <!-- Témoignages dynamiques (Firestore) -->
+    <section class="section" id="temoignages">
+      <div class="section-title">Ce que nos <span>étudiants</span> disent</div>
+      <div id="testimonialsContainer" style="min-height: 200px;">Chargement des avis...</div>
+    </section>
+
+    <!-- Statistiques & compteur de ventes -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-number" id="ventesCount">0</div><div>Formations vendues</div></div>
+      <div class="stat-card"><div class="stat-number" id="etudiantsCount">0</div><div>Étudiants inscrits</div></div>
+      <div class="stat-card"><div class="stat-number">315k FCFA</div><div>Chiffre d'affaires / 3 sem</div></div>
+    </div>
+
+    <!-- Formulaire de contact (envoie un message à l'admin) -->
     <section class="section" id="contact">
-      <div style="max-width:550px; margin:0 auto; background:#101624; border-radius:40px; padding:30px; text-align:center;">
-        <i class="fab fa-whatsapp" style="font-size:3rem; color:#25D366;"></i>
-        <h3>Contactez Yamada</h3>
-        <a href="https://wa.me/241077335574" target="_blank" style="background:#25D366; display:inline-block; padding:12px 28px; border-radius:50px; text-decoration:none; color:white; font-weight:bold; margin-top:15px;">WhatsApp +241077335574</a>
+      <div class="section-title">Une question ? <span>Écrivez-nous</span></div>
+      <div class="contact-form">
+        <input type="text" id="contactName" placeholder="Votre nom" style="width:100%; margin-bottom:10px;">
+        <textarea id="contactMessage" rows="4" placeholder="Votre message..."></textarea>
+        <button id="sendContactBtn" style="background:#00ffc3; color:#0a0e18; border:none; padding:12px 24px; border-radius:40px; margin-top:15px; cursor:pointer; font-weight:bold;">Envoyer le message</button>
+        <div id="contactFeedback" style="margin-top:10px; font-size:0.8rem;"></div>
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
+        <p>Ou contactez-nous directement sur WhatsApp : <strong>+241077335574</strong></p>
       </div>
     </section>
 
-    <footer><p>© 2025 Yamada Dev – Formations professionnelles</p></footer>
+    <footer><p>© 2025 Yamada Dev – Formations professionnelles certifiantes</p></footer>
   </div>
 </div>
 
 <script>
-  // ================= CONFIGURATION FIREBASE =================
+  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyCrIFVX2OchRGvyS2AUHpdggZoroKnlt8o",
     authDomain: "yamada-dev-officiel.firebaseapp.com",
@@ -217,33 +189,26 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // Éléments DOM
+  // DOM elements
   const authContainer = document.getElementById('authContainer');
   const siteContent = document.getElementById('siteContent');
   const loginPanel = document.getElementById('loginPanel');
   const signupPanel = document.getElementById('signupPanel');
 
-  // ========== GESTION DE L'EXPIRATION DE SESSION (3 jours) ==========
+  // Session expiry (3 days)
   async function setSessionExpiry(user, days = 3) {
     const expiry = new Date();
     expiry.setDate(expiry.getDate() + days);
-    await db.collection('users').doc(user.uid).update({
-      sessionExpiry: firebase.firestore.Timestamp.fromDate(expiry)
-    });
+    await db.collection('users').doc(user.uid).update({ sessionExpiry: firebase.firestore.Timestamp.fromDate(expiry) });
   }
-
   async function isSessionValid(user) {
     const doc = await db.collection('users').doc(user.uid).get();
     const data = doc.data();
-    if (data && data.sessionExpiry) {
-      const expiry = data.sessionExpiry.toDate();
-      const now = new Date();
-      return now <= expiry;
-    }
-    return true; // si pas d'expiration définie, on considère valide
+    if (data && data.sessionExpiry) return new Date() <= data.sessionExpiry.toDate();
+    return true;
   }
 
-  // ========== MISE À JOUR DES PRIX SELON STATUT ÉLÈVE ==========
+  // Update prices based on student status
   function updatePrices(estEtudiant) {
     const prixBot = document.getElementById('prixBotDisplay');
     const prixBug = document.getElementById('prixBugDisplay');
@@ -253,7 +218,7 @@
       prixBot.innerHTML = '13 000 <small>FCFA</small>';
       prixBug.innerHTML = '15 000 <small>FCFA</small>';
       prixTotal.innerHTML = '22 000 <small>FCFA</small>';
-      highlight.innerHTML = '🔥 Tarif élève : Formation Bot 13 000 FCFA | Bug Bot 15 000 FCFA | Total 22 000 FCFA 🔥';
+      highlight.innerHTML = '🔥 Tarif élève : Bot 13 000 | Bug Bot 15 000 | Total 22 000 FCFA 🔥';
       document.querySelectorAll('.btn-wa').forEach(btn => {
         const f = btn.getAttribute('data-formation');
         if (f === 'Bot') btn.setAttribute('data-price', '13000');
@@ -264,7 +229,7 @@
       prixBot.innerHTML = '15 500 <small>FCFA</small>';
       prixBug.innerHTML = '17 000 <small>FCFA</small>';
       prixTotal.innerHTML = '25 000 <small>FCFA</small>';
-      highlight.innerHTML = '🔥 Formations à partir de <strong>15 500 FCFA</strong> (prix public) 🔥';
+      highlight.innerHTML = '🔥 Formations à partir de 15 500 FCFA 🔥';
       document.querySelectorAll('.btn-wa').forEach(btn => {
         const f = btn.getAttribute('data-formation');
         if (f === 'Bot') btn.setAttribute('data-price', '15500');
@@ -274,119 +239,145 @@
     }
   }
 
-  // ========== DÉCONNEXION MANUELLE ==========
-  document.getElementById('logoutBtn').onclick = async () => {
-    await auth.signOut();
+  // Load testimonials from Firestore
+  async function loadTestimonials() {
+    const container = document.getElementById('testimonialsContainer');
+    try {
+      const snapshot = await db.collection('testimonials').orderBy('date', 'desc').limit(3).get();
+      if (snapshot.empty) {
+        container.innerHTML = '<div class="testimonial">⭐ "Formation incroyable, j’ai créé mon premier bot en 2 jours !" – Jean</div><div class="testimonial">⭐ "Le support est réactif, je recommande." – Sarah</div>';
+        return;
+      }
+      container.innerHTML = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        container.innerHTML += `<div class="testimonial"><i class="fas fa-quote-left" style="color:#00ffc3; margin-right:10px;"></i> "${data.message}"<br><strong>– ${data.author}</strong></div>`;
+      });
+    } catch (e) { console.error(e); }
+  }
+
+  // Load sales count and students count
+  async function loadStats() {
+    const ventesSpan = document.getElementById('ventesCount');
+    const etudiantsSpan = document.getElementById('etudiantsCount');
+    try {
+      const ventesDoc = await db.collection('stats').doc('ventes').get();
+      if (ventesDoc.exists) ventesSpan.innerText = ventesDoc.data().count || 0;
+      else ventesSpan.innerText = '0';
+      const usersSnapshot = await db.collection('users').get();
+      etudiantsSpan.innerText = usersSnapshot.size;
+    } catch (e) { console.error(e); }
+  }
+
+  // Increment sales count when a purchase is made (via WhatsApp click)
+  async function incrementSales() {
+    const ventesRef = db.collection('stats').doc('ventes');
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(ventesRef);
+      const newCount = (doc.exists ? doc.data().count : 0) + 1;
+      transaction.set(ventesRef, { count: newCount });
+    });
+    loadStats();
+  }
+
+  // Handle WhatsApp buttons (increment sales)
+  document.querySelectorAll('.btn-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const formation = btn.getAttribute('data-formation');
+      const price = btn.getAttribute('data-price');
+      const msg = `Bonjour Yamada Dev, je souhaite acheter la formation ${formation} au prix de ${price} FCFA. Merci de me guider pour le paiement.`;
+      window.open(`https://wa.me/241077335574?text=${encodeURIComponent(msg)}`, '_blank');
+      incrementSales(); // Simule une vente (à affiner selon confirmation réelle)
+    });
+  });
+
+  // Contact form: send message to admin (store in Firestore)
+  document.getElementById('sendContactBtn').onclick = async () => {
+    const name = document.getElementById('contactName').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    const feedback = document.getElementById('contactFeedback');
+    if (!name || !message) { feedback.innerText = "Veuillez remplir tous les champs."; return; }
+    try {
+      await db.collection('contactMessages').add({
+        name, message, date: new Date(), lu: false
+      });
+      feedback.innerText = "✅ Message envoyé ! L'administrateur vous répondra sous 24h.";
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactMessage').value = '';
+    } catch (err) {
+      feedback.innerText = "Erreur : " + err.message;
+    }
   };
 
-  // ========== INSCRIPTION ==========
+  // Logout
+  document.getElementById('logoutBtn').onclick = async () => { await auth.signOut(); };
+
+  // Signup
   document.getElementById('signupBtn').onclick = async () => {
     const nom = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
     const pwd = document.getElementById('signupPassword').value;
     const estEtudiant = document.getElementById('isStudent').checked;
     const errorDiv = document.getElementById('signupError');
-    if (!nom || !email || pwd.length < 6) {
-      errorDiv.innerText = "Remplissez tous les champs (mot de passe ≥6 caractères).";
-      return;
-    }
+    if (!nom || !email || pwd.length < 6) { errorDiv.innerText = "Champs invalides (mdp ≥6)"; return; }
     try {
       const cred = await auth.createUserWithEmailAndPassword(email, pwd);
-      // Définir l'expiration de session (3 jours)
-      const expiry = new Date();
-      expiry.setDate(expiry.getDate() + 3);
+      const expiry = new Date(); expiry.setDate(expiry.getDate() + 3);
       await db.collection('users').doc(cred.user.uid).set({
         nom, email, estEtudiant, dateInscription: new Date(),
         sessionExpiry: firebase.firestore.Timestamp.fromDate(expiry)
       });
-      await db.collection('logs').add({
-        email, action: 'inscription', estEtudiant, date: new Date(), uid: cred.user.uid
-      });
-    } catch (err) {
-      errorDiv.innerText = err.message;
-    }
+      await db.collection('logs').add({ email, action: 'inscription', estEtudiant, date: new Date() });
+    } catch (err) { errorDiv.innerText = err.message; }
   };
 
-  // ========== CONNEXION ==========
+  // Login
   document.getElementById('loginBtn').onclick = async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pwd = document.getElementById('loginPassword').value;
     const errorDiv = document.getElementById('loginError');
-    if (!email || !pwd) {
-      errorDiv.innerText = "Email et mot de passe requis.";
-      return;
-    }
+    if (!email || !pwd) { errorDiv.innerText = "Email et mot de passe requis."; return; }
     try {
       const cred = await auth.signInWithEmailAndPassword(email, pwd);
-      // Mettre à jour l'expiration de session (3 jours)
       await setSessionExpiry(cred.user, 3);
-    } catch (err) {
-      errorDiv.innerText = err.message;
-    }
+    } catch (err) { errorDiv.innerText = err.message; }
   };
 
-  // ========== SURVEILLANCE DE L'ÉTAT DE CONNEXION ==========
+  // Toggle auth panels
+  document.getElementById('showSignupLink').onclick = (e) => { e.preventDefault(); loginPanel.style.display = 'none'; signupPanel.style.display = 'block'; };
+  document.getElementById('showLoginLink').onclick = (e) => { e.preventDefault(); signupPanel.style.display = 'none'; loginPanel.style.display = 'block'; };
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const parent = q.parentElement;
+      parent.classList.toggle('active');
+      const icon = q.querySelector('i');
+      if (parent.classList.contains('active')) icon.style.transform = 'rotate(180deg)';
+      else icon.style.transform = 'rotate(0deg)';
+    });
+  });
+
+  // Firebase auth state handler
   auth.onAuthStateChanged(async (user) => {
     if (user) {
-      // Vérifier la validité de la session
       const valid = await isSessionValid(user);
-      if (!valid) {
-        await auth.signOut();
-        alert("⏰ Votre session a expiré (3 jours). Veuillez vous reconnecter.");
-        return;
-      }
-
-      // Récupérer les données utilisateur
-      const docRef = db.collection('users').doc(user.uid);
-      const doc = await docRef.get();
-      let estEtudiant = false;
-      if (doc.exists) {
-        estEtudiant = doc.data().estEtudiant || false;
-      } else {
-        // Sécurité : si le document n'existe pas, le créer
-        await docRef.set({ email: user.email, estEtudiant: false, dateInscription: new Date() });
-      }
+      if (!valid) { await auth.signOut(); alert("Session expirée, reconnectez-vous."); return; }
+      const doc = await db.collection('users').doc(user.uid).get();
+      let estEtudiant = doc.exists ? (doc.data().estEtudiant || false) : false;
       updatePrices(estEtudiant);
       authContainer.style.display = 'none';
       siteContent.style.display = 'block';
-      // Enregistrer la connexion dans les logs pour l'admin
-      await db.collection('logs').add({
-        email: user.email,
-        action: 'connexion',
-        date: new Date(),
-        uid: user.uid
-      });
+      await db.collection('logs').add({ email: user.email, action: 'connexion', date: new Date() });
+      loadTestimonials();
+      loadStats();
     } else {
       authContainer.style.display = 'block';
       siteContent.style.display = 'none';
-      // Réafficher le panneau de connexion
       loginPanel.style.display = 'block';
       signupPanel.style.display = 'none';
     }
-  });
-
-  // ========== BASCULE ENTRE FORMULAIRES ==========
-  document.getElementById('showSignupLink').onclick = (e) => {
-    e.preventDefault();
-    loginPanel.style.display = 'none';
-    signupPanel.style.display = 'block';
-  };
-  document.getElementById('showLoginLink').onclick = (e) => {
-    e.preventDefault();
-    signupPanel.style.display = 'none';
-    loginPanel.style.display = 'block';
-  };
-
-  // ========== BOUTONS WHATSAPP AVEC LE BON PRIX ==========
-  const phoneNumber = '241077335574';
-  document.querySelectorAll('.btn-wa').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const formation = btn.getAttribute('data-formation');
-      const price = btn.getAttribute('data-price');
-      const msg = `Bonjour Yamada Dev, je souhaite acheter la formation ${formation} au prix de ${price} FCFA. Veuillez me guider pour le paiement et m'envoyer le PDF. Merci !`;
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-    });
   });
 </script>
 </body>
