@@ -39,7 +39,6 @@
       padding: 0 24px;
     }
 
-    /* navigation */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -74,7 +73,6 @@
       color: #00ffc3;
     }
 
-    /* hero */
     .hero {
       padding: 60px 0 40px;
       display: flex;
@@ -118,7 +116,6 @@
       margin-top: 10px;
       backdrop-filter: blur(4px);
     }
-    /* formations cards */
     .section {
       padding: 60px 0;
       border-top: 1px solid rgba(255,255,255,0.05);
@@ -223,7 +220,6 @@
       filter: brightness(1.05);
       transform: scale(0.98);
     }
-    /* section contenu PDF */
     .pdf-preview {
       background: #0f1322;
       border-radius: 32px;
@@ -261,14 +257,6 @@
       .navbar { flex-direction: column; }
       .section-title { font-size: 1.8rem; }
     }
-    .highlight-cfa {
-      background: #00ffc322;
-      border-radius: 20px;
-      padding: 4px 12px;
-      display: inline-block;
-    }
-    
-    /* Portfolio styles */
     .portfolio-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -357,21 +345,19 @@
     <h1>Formations de développeur, bots & hacking éthique</h1>
     <p>Choisissez votre voie : <strong>Bots, Bug Bounty ou la totale</strong>. Recevez le PDF complet après paiement. Gagnez votre argent sans dépendre de personne.</p>
     <div class="price-highlight">
-      🔥 Chaque formation à seulement <strong>9 950 FCFA</strong> 🔥
+      🔥 Formations à partir de <strong>15 500 FCFA</strong> 🔥
     </div>
   </section>
 
-  <!-- section trois formations payantes -->
   <section class="section" id="formations">
     <div class="section-title">Choisissez votre formation <span>Yamada Dev</span></div>
     <div class="cards-grid">
       
-      <!-- Formation BOT (création de bots) -->
       <div class="formation-card">
         <div class="card-badge">⭐ POPULAIRE</div>
         <i class="fas fa-robot"></i>
         <h3>Formation Bot</h3>
-        <div class="price">9 950 <small>FCFA</small></div>
+        <div class="price">15 500 <small>FCFA</small></div>
         <ul class="features-list">
           <li><i class="fas fa-check-circle"></i> Création de bots Discord & Telegram</li>
           <li><i class="fas fa-check-circle"></i> Automatisation Web (scraping, trading)</li>
@@ -379,17 +365,16 @@
           <li><i class="fas fa-check-circle"></i> PDF complet + exemples de codes</li>
           <li><i class="fas fa-check-circle"></i> Monétisation des bots (revenus passifs)</li>
         </ul>
-        <button class="btn-wa" data-formation="Formation BOT" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION BOT (création de bots) au prix de 9 950 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !">
+        <button class="btn-wa" data-formation="Formation BOT" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION BOT (création de bots) au prix de 15 500 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !">
           <i class="fab fa-whatsapp"></i> Acheter via WhatsApp
         </button>
       </div>
       
-      <!-- Formation BUG BOT (hacking & bug bounty) -->
       <div class="formation-card">
         <div class="card-badge">🐞 NOUVEAU</div>
         <i class="fas fa-bug"></i>
         <h3>Formation Bug Bot</h3>
-        <div class="price">9 950 <small>FCFA</small></div>
+        <div class="price">17 000 <small>FCFA</small></div>
         <ul class="features-list">
           <li><i class="fas fa-check-circle"></i> Introduction au Bug Bounty & Hacking Éthique</li>
           <li><i class="fas fa-check-circle"></i> Découverte de failles (XSS, SQLi, CSRF)</li>
@@ -397,17 +382,16 @@
           <li><i class="fas fa-check-circle"></i> Techniques de report & gagner de l'argent sur les plateformes</li>
           <li><i class="fas fa-check-circle"></i> PDF chapitre dédié + outils pratiques</li>
         </ul>
-        <button class="btn-wa" data-formation="Formation Bug Bot" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION BUG BOT (hacking éthique & bug bounty) au prix de 9 950 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !">
+        <button class="btn-wa" data-formation="Formation Bug Bot" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION BUG BOT (hacking éthique & bug bounty) au prix de 17 000 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !">
           <i class="fab fa-whatsapp"></i> Acheter via WhatsApp
         </button>
       </div>
       
-      <!-- Formation TOTAL (Bot + Bug Bot) -->
       <div class="formation-card">
         <div class="card-badge">🏆 COMPLET</div>
         <i class="fas fa-crown"></i>
         <h3>Formation Total</h3>
-        <div class="price">9 950 <small>FCFA</small></div>
+        <div class="price">25 000 <small>FCFA</small></div>
         <ul class="features-list">
           <li><i class="fas fa-check-circle"></i> Accès aux deux formations : BOT + BUG BOT</li>
           <li><i class="fas fa-check-circle"></i> Double PDF : Création de bots & Hacking éthique</li>
@@ -415,15 +399,14 @@
           <li><i class="fas fa-check-circle"></i> Communauté privée & updates à vie</li>
           <li><i class="fas fa-check-circle"></i> Devenez un développeur redoutable et indépendant</li>
         </ul>
-        <button class="btn-wa" data-formation="Formation TOTAL" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION TOTAL (BOT + BUG BOT) au prix de 9 950 FCFA. Veuillez me donner les instructions de paiement et m'envoyer les deux PDF. Merci !">
+        <button class="btn-wa" data-formation="Formation TOTAL" data-message="Bonjour Yamada Dev, je souhaite acheter la FORMATION TOTAL (BOT + BUG BOT) au prix de 25 000 FCFA. Veuillez me donner les instructions de paiement et m'envoyer les deux PDF et le bonus. Merci !">
           <i class="fab fa-whatsapp"></i> Acheter via WhatsApp
         </button>
       </div>
     </div>
-    <p style="text-align: center; margin-top: 35px; font-size: 0.9rem; color:#9aa7d4;"><i class="fas fa-shield-alt"></i> Paiement sécurisé : après validation, vous recevez immédiatement le(s) PDF(s) sur WhatsApp. Contact direct avec le formateur +241077335574</p>
+    <p style="text-align: center; margin-top: 35px; font-size: 0.9rem; color:#9aa7d4;"><i class="fas fa-shield-alt"></i> Paiement sécurisé. Après validation, vous recevez immédiatement le(s) PDF(s) sur WhatsApp. Contact direct +241077335574</p>
   </section>
 
-  <!-- Section contenu PDF créé par Yamada Dev (description des PDF que l'utilisateur envoie) -->
   <section class="section" id="contenu">
     <div class="section-title">Contenu des <span>PDF de formation</span> (créés par Yamada Dev)</div>
     <div class="pdf-preview">
@@ -449,11 +432,8 @@
     </div>
   </section>
 
-  <!-- SECTION PORTFOLIO & RÉALISATIONS -->
   <section class="section" id="portfolio">
     <div class="section-title">Nos <span>réalisations</span> – Preuve par l'exemple</div>
-    
-    <!-- Statistiques de revenus -->
     <div class="revenue-stats">
       <i class="fas fa-chart-line" style="font-size: 2rem; color:#00ffc3;"></i>
       <h3 style="margin: 15px 0;">Chiffre d'affaires généré grâce au développement</h3>
@@ -461,74 +441,52 @@
       <p>📈 toutes les 3 semaines grâce à nos projets web, bots et solutions sur mesure</p>
       <p style="font-size: 0.9rem; margin-top: 15px;">Des clients satisfaits au Gabon et à l'international</p>
     </div>
-    
     <div class="portfolio-grid">
-      <!-- Projet 1 : yamada.dev (agence) -->
       <a href="https://piero241.github.io/yamada-dev/" target="_blank" class="portfolio-card">
-        <div class="portfolio-img">
-          <i class="fas fa-code"></i>
-        </div>
+        <div class="portfolio-img"><i class="fas fa-code"></i></div>
         <div class="portfolio-info">
           <h3>Yamada Dev – Agence digitale</h3>
-          <p>Site vitrine de mon agence de développement. Présentation des services : création de sites web, bots WhatsApp/Discord, automatisation.</p>
+          <p>Site vitrine de mon agence de développement.</p>
           <span class="tech-badge">HTML/CSS/JS</span>
-          <span class="tech-badge">Responsive</span>
-          <span class="tech-badge">UI/UX</span>
         </div>
       </a>
-      
-      <!-- Projet 2 : Emmelia Shop (e-commerce client) -->
       <a href="https://emmelia-chop.onrender.com/" target="_blank" class="portfolio-card">
-        <div class="portfolio-img">
-          <i class="fas fa-shopping-bag"></i>
-        </div>
+        <div class="portfolio-img"><i class="fas fa-shopping-bag"></i></div>
         <div class="portfolio-info">
           <h3>Emmelia Shop – Boutique en ligne</h3>
-          <p>Site e-commerce pour une cliente. Vente de sacs, chaussures, vêtements et accessoires. Intégration WhatsApp pour les commandes.</p>
-          <span class="tech-badge">E-commerce</span>
+          <p>E-commerce vente de sacs, chaussures, etc.</p>
           <span class="tech-badge">WhatsApp API</span>
-          <span class="tech-badge">Responsive</span>
         </div>
       </a>
-      
-      <!-- Projet 3 : Parfums BM (client parfumerie) -->
       <a href="https://piero241.github.io" target="_blank" class="portfolio-card">
-        <div class="portfolio-img">
-          <i class="fas fa-perfume"></i>
-        </div>
+        <div class="portfolio-img"><i class="fas fa-perfume"></i></div>
         <div class="portfolio-info">
-          <h3>BM.parfum.chop – Parfumerie en ligne</h3>
-          <p>Site de vente de parfums haut de gamme 100% gabonais. Collection exclusive à 12 000 FCFA le flacon. Livraison nationale.</p>
+          <h3>BM.parfum.chop – Parfumerie</h3>
+          <p>Vente de parfums haut de gamme gabonais.</p>
           <span class="tech-badge">Landing page</span>
-          <span class="tech-badge">Catalogue produits</span>
-          <span class="tech-badge">Mobile first</span>
         </div>
       </a>
     </div>
-    
-    <p style="text-align: center; margin-top: 30px;"><i class="fas fa-bullhorn"></i> Et bien d'autres projets non listés ici. Chaque site est le fruit d'un travail sur mesure pour des clients satisfaits.</p>
   </section>
 
-  <!-- à propos & numéro WhatsApp -->
   <section class="section" id="contact">
     <div class="section-title">Contact <span>et support</span></div>
     <div style="max-width: 550px; margin: 0 auto; background:#101624; border-radius: 40px; padding: 30px; text-align: center;">
       <i class="fab fa-whatsapp" style="font-size: 3rem; color:#25D366;"></i>
       <h3 style="margin: 15px 0;">Discutez directement avec Yamada</h3>
-      <p style="margin-bottom: 15px;">Pour toute question, ou si vous préférez commander manuellement :</p>
-      <a href="https://wa.me/241077335574?text=Bonjour%20Yamada%20Dev%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20vos%20formations%20%C3%A0%209950%20FCFA.%20Pouvez-vous%20me%20guider%20%3F" target="_blank" style="background: #25D366; display: inline-block; padding: 12px 28px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin-top: 10px;"><i class="fab fa-whatsapp"></i> Contacter +241077335574</a>
-      <p style="margin-top: 20px; font-size: 0.8rem;">Nos formations sont payantes : 9 950 FCFA chacune. Après paiement, vous recevez le PDF instantanément.</p>
+      <p style="margin-bottom: 15px;">Pour toute question, ou commander manuellement :</p>
+      <a href="https://wa.me/241077335574?text=Bonjour%20Yamada%20Dev%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20vos%20formations%20(15%20500%20%E2%82%AC%20?%20FCFA).%20Pouvez-vous%20me%20guider%20%3F" target="_blank" style="background: #25D366; display: inline-block; padding: 12px 28px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin-top: 10px;"><i class="fab fa-whatsapp"></i> Contacter +241077335574</a>
+      <p style="margin-top: 20px; font-size: 0.8rem;">Nos formations : Bot 15 500 FCFA | Bug Bot 17 000 FCFA | Total 25 000 FCFA. Paiement sécurisé.</p>
     </div>
   </section>
 
   <footer>
-    <p>© 2025 Yamada Dev – Formations professionnelles | Devenez indépendant financièrement grâce au code, bots et hacking éthique.</p>
+    <p>© 2025 Yamada Dev – Formations professionnelles | Devenez indépendant financièrement.</p>
     <p style="margin-top: 8px;">📧 Contact officiel : WhatsApp +241077335574</p>
   </footer>
 </div>
 
 <script>
-  // Gestion des boutons WhatsApp
   const whatsappButtons = document.querySelectorAll('.btn-wa');
   const PHONE_NUMBER = '241077335574';
   
@@ -537,19 +495,15 @@
       e.preventDefault();
       let customMessage = button.getAttribute('data-message');
       const formationName = button.getAttribute('data-formation') || 'Formation Yamada Dev';
-      
       if (!customMessage) {
-        customMessage = `Bonjour Yamada Dev, je souhaite acheter la ${formationName} au prix de 9 950 FCFA. Veuillez me donner les instructions de paiement et m'envoyer le PDF. Merci !`;
+        customMessage = `Bonjour Yamada Dev, je souhaite acheter la ${formationName}. Veuillez me donner les instructions de paiement et m'envoyer le(s) PDF. Merci !`;
       }
-      
       const encodedMessage = encodeURIComponent(customMessage);
       const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${encodedMessage}`;
-      
       window.open(whatsappUrl, '_blank');
     });
   });
-  
-  // Animation au scroll pour les éléments
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting) {
@@ -565,8 +519,6 @@
     el.style.transition = 'all 0.5s ease-out';
     observer.observe(el);
   });
-  
-  console.log("Yamada Dev Formation – 9 950 FCFA, portfolio intégré + CA 315k FCFA toutes les 3 semaines");
 </script>
 </body>
 </html>
