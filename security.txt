@@ -1,0 +1,6 @@
+# Contact pour signaler une faille de sécurité
+Contact: mailto:rp850788@gmail.com
+Contact: https://wa.me/241077335574
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: fr, en
+Canonical: https://piero241.github.io/yamada-dev-site-officiel/security.txt

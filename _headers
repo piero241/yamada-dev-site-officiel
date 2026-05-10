@@ -1,0 +1,8 @@
+# Sécurité renforcée pour Yamada Dev
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), microphone=(), camera=()
+  Content-Security-Policy: default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com;
