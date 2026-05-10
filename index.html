@@ -148,14 +148,14 @@
       <div id="testimonialsContainer" style="min-height: 200px;">Chargement des avis...</div>
     </section>
 
-    <!-- Statistiques & compteur de ventes -->
+    <!-- Statistiques -->
     <div class="stats-grid" id="statsGrid">
       <div class="stat-card"><div class="stat-number" id="ventesCount">0</div><div>Formations vendues</div></div>
       <div class="stat-card"><div class="stat-number" id="etudiantsCount">0</div><div>Étudiants inscrits</div></div>
       <div class="stat-card"><div class="stat-number">315k FCFA</div><div>Chiffre d'affaires / 3 sem</div></div>
     </div>
 
-    <!-- Formulaire de contact (envoie un message à l'admin) -->
+    <!-- Formulaire de contact -->
     <section class="section" id="contact">
       <div class="section-title">Une question ? <span>Écrivez-nous</span></div>
       <div class="contact-form">
@@ -189,7 +189,6 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // DOM elements
   const authContainer = document.getElementById('authContainer');
   const siteContent = document.getElementById('siteContent');
   const loginPanel = document.getElementById('loginPanel');
@@ -208,7 +207,6 @@
     return true;
   }
 
-  // Update prices based on student status
   function updatePrices(estEtudiant) {
     const prixBot = document.getElementById('prixBotDisplay');
     const prixBug = document.getElementById('prixBugDisplay');
@@ -239,7 +237,6 @@
     }
   }
 
-  // Load testimonials from Firestore
   async function loadTestimonials() {
     const container = document.getElementById('testimonialsContainer');
     try {
@@ -256,7 +253,6 @@
     } catch (e) { console.error(e); }
   }
 
-  // Load sales count and students count
   async function loadStats() {
     const ventesSpan = document.getElementById('ventesCount');
     const etudiantsSpan = document.getElementById('etudiantsCount');
@@ -269,7 +265,6 @@
     } catch (e) { console.error(e); }
   }
 
-  // Increment sales count when a purchase is made (via WhatsApp click)
   async function incrementSales() {
     const ventesRef = db.collection('stats').doc('ventes');
     await db.runTransaction(async (transaction) => {
@@ -280,7 +275,6 @@
     loadStats();
   }
 
-  // Handle WhatsApp buttons (increment sales)
   document.querySelectorAll('.btn-wa').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -288,11 +282,10 @@
       const price = btn.getAttribute('data-price');
       const msg = `Bonjour Yamada Dev, je souhaite acheter la formation ${formation} au prix de ${price} FCFA. Merci de me guider pour le paiement.`;
       window.open(`https://wa.me/241077335574?text=${encodeURIComponent(msg)}`, '_blank');
-      incrementSales(); // Simule une vente (à affiner selon confirmation réelle)
+      incrementSales();
     });
   });
 
-  // Contact form: send message to admin (store in Firestore)
   document.getElementById('sendContactBtn').onclick = async () => {
     const name = document.getElementById('contactName').value.trim();
     const message = document.getElementById('contactMessage').value.trim();
@@ -310,10 +303,8 @@
     }
   };
 
-  // Logout
   document.getElementById('logoutBtn').onclick = async () => { await auth.signOut(); };
 
-  // Signup
   document.getElementById('signupBtn').onclick = async () => {
     const nom = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
@@ -332,7 +323,6 @@
     } catch (err) { errorDiv.innerText = err.message; }
   };
 
-  // Login
   document.getElementById('loginBtn').onclick = async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pwd = document.getElementById('loginPassword').value;
@@ -344,11 +334,9 @@
     } catch (err) { errorDiv.innerText = err.message; }
   };
 
-  // Toggle auth panels
   document.getElementById('showSignupLink').onclick = (e) => { e.preventDefault(); loginPanel.style.display = 'none'; signupPanel.style.display = 'block'; };
   document.getElementById('showLoginLink').onclick = (e) => { e.preventDefault(); signupPanel.style.display = 'none'; loginPanel.style.display = 'block'; };
 
-  // FAQ accordion
   document.querySelectorAll('.faq-question').forEach(q => {
     q.addEventListener('click', () => {
       const parent = q.parentElement;
@@ -359,7 +347,6 @@
     });
   });
 
-  // Firebase auth state handler
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       const valid = await isSessionValid(user);
