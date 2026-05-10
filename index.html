@@ -78,7 +78,7 @@
 <body>
 <div class="glow-bg"></div>
 
-<!-- Auth containers -->
+<!-- Authentication containers -->
 <div id="authContainer" class="auth-container">
   <div id="loginPanel">
     <h2>🔐 Connexion</h2>
@@ -102,7 +102,7 @@
   </div>
 </div>
 
-<!-- Main content -->
+<!-- Main site content -->
 <div id="siteContent" class="site-content">
   <div class="container">
     <nav class="navbar">
@@ -133,7 +133,7 @@
       </div>
     </section>
 
-    <!-- FAQ interactive -->
+    <!-- FAQ accordéon -->
     <section class="section" id="faq">
       <div class="section-title">Foire aux <span>questions</span></div>
       <div class="faq-item"><div class="faq-question">Comment accéder aux PDF après achat ? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Après validation du paiement sur WhatsApp, vous recevez immédiatement le(s) PDF par message. Accès à vie.</div></div>
@@ -142,7 +142,7 @@
       <div class="faq-item"><div class="faq-question">La formation est-elle à jour ? <i class="fas fa-chevron-down"></i></div><div class="faq-answer">Les PDF sont mis à jour régulièrement. Vous recevez les nouvelles versions gratuitement.</div></div>
     </section>
 
-    <!-- Témoignages dynamiques (Firestore) -->
+    <!-- Témoignages (sécurisés) -->
     <section class="section" id="temoignages">
       <div class="section-title">Ce que nos <span>étudiants</span> disent</div>
       <div id="testimonialsContainer" style="min-height: 200px;">Chargement des avis...</div>
@@ -175,7 +175,7 @@
 </div>
 
 <script>
-  // Firebase config
+  // Firebase configuration (identique)
   const firebaseConfig = {
     apiKey: "AIzaSyCrIFVX2OchRGvyS2AUHpdggZoroKnlt8o",
     authDomain: "yamada-dev-officiel.firebaseapp.com",
@@ -237,18 +237,35 @@
     }
   }
 
+  // Chargement des témoignages SÉCURISÉ (pas d'innerHTML)
   async function loadTestimonials() {
     const container = document.getElementById('testimonialsContainer');
     try {
       const snapshot = await db.collection('testimonials').orderBy('date', 'desc').limit(3).get();
+      container.innerHTML = ''; // vide sans danger
       if (snapshot.empty) {
-        container.innerHTML = '<div class="testimonial">⭐ "Formation incroyable, j’ai créé mon premier bot en 2 jours !" – Jean</div><div class="testimonial">⭐ "Le support est réactif, je recommande." – Sarah</div>';
+        const defaultMsg1 = document.createElement('div');
+        defaultMsg1.className = 'testimonial';
+        defaultMsg1.textContent = '⭐ "Formation incroyable, j’ai créé mon premier bot en 2 jours !" – Jean';
+        container.appendChild(defaultMsg1);
+        const defaultMsg2 = document.createElement('div');
+        defaultMsg2.className = 'testimonial';
+        defaultMsg2.textContent = '⭐ "Le support est réactif, je recommande." – Sarah';
+        container.appendChild(defaultMsg2);
         return;
       }
-      container.innerHTML = '';
       snapshot.forEach(doc => {
         const data = doc.data();
-        container.innerHTML += `<div class="testimonial"><i class="fas fa-quote-left" style="color:#00ffc3; margin-right:10px;"></i> "${data.message}"<br><strong>– ${data.author}</strong></div>`;
+        const div = document.createElement('div');
+        div.className = 'testimonial';
+        const iconSpan = document.createElement('i');
+        iconSpan.className = 'fas fa-quote-left';
+        iconSpan.style.color = '#00ffc3';
+        iconSpan.style.marginRight = '10px';
+        const textNode = document.createTextNode(` "${data.message}" – ${data.author}`);
+        div.appendChild(iconSpan);
+        div.appendChild(textNode);
+        container.appendChild(div);
       });
     } catch (e) { console.error(e); }
   }
@@ -258,10 +275,10 @@
     const etudiantsSpan = document.getElementById('etudiantsCount');
     try {
       const ventesDoc = await db.collection('stats').doc('ventes').get();
-      if (ventesDoc.exists) ventesSpan.innerText = ventesDoc.data().count || 0;
-      else ventesSpan.innerText = '0';
+      if (ventesDoc.exists) ventesSpan.textContent = ventesDoc.data().count || 0;
+      else ventesSpan.textContent = '0';
       const usersSnapshot = await db.collection('users').get();
-      etudiantsSpan.innerText = usersSnapshot.size;
+      etudiantsSpan.textContent = usersSnapshot.size;
     } catch (e) { console.error(e); }
   }
 
@@ -275,6 +292,7 @@
     loadStats();
   }
 
+  // WhatsApp buttons (safe click)
   document.querySelectorAll('.btn-wa').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -286,32 +304,33 @@
     });
   });
 
+  // Contact form
   document.getElementById('sendContactBtn').onclick = async () => {
     const name = document.getElementById('contactName').value.trim();
     const message = document.getElementById('contactMessage').value.trim();
     const feedback = document.getElementById('contactFeedback');
-    if (!name || !message) { feedback.innerText = "Veuillez remplir tous les champs."; return; }
+    if (!name || !message) { feedback.textContent = "Veuillez remplir tous les champs."; return; }
     try {
-      await db.collection('contactMessages').add({
-        name, message, date: new Date(), lu: false
-      });
-      feedback.innerText = "✅ Message envoyé ! L'administrateur vous répondra sous 24h.";
+      await db.collection('contactMessages').add({ name, message, date: new Date(), lu: false });
+      feedback.textContent = "✅ Message envoyé ! L'administrateur vous répondra sous 24h.";
       document.getElementById('contactName').value = '';
       document.getElementById('contactMessage').value = '';
     } catch (err) {
-      feedback.innerText = "Erreur : " + err.message;
+      feedback.textContent = "Erreur : " + err.message;
     }
   };
 
+  // Logout
   document.getElementById('logoutBtn').onclick = async () => { await auth.signOut(); };
 
+  // Signup
   document.getElementById('signupBtn').onclick = async () => {
     const nom = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
     const pwd = document.getElementById('signupPassword').value;
     const estEtudiant = document.getElementById('isStudent').checked;
     const errorDiv = document.getElementById('signupError');
-    if (!nom || !email || pwd.length < 6) { errorDiv.innerText = "Champs invalides (mdp ≥6)"; return; }
+    if (!nom || !email || pwd.length < 6) { errorDiv.textContent = "Champs invalides (mdp ≥6)"; return; }
     try {
       const cred = await auth.createUserWithEmailAndPassword(email, pwd);
       const expiry = new Date(); expiry.setDate(expiry.getDate() + 3);
@@ -320,23 +339,26 @@
         sessionExpiry: firebase.firestore.Timestamp.fromDate(expiry)
       });
       await db.collection('logs').add({ email, action: 'inscription', estEtudiant, date: new Date() });
-    } catch (err) { errorDiv.innerText = err.message; }
+    } catch (err) { errorDiv.textContent = err.message; }
   };
 
+  // Login
   document.getElementById('loginBtn').onclick = async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pwd = document.getElementById('loginPassword').value;
     const errorDiv = document.getElementById('loginError');
-    if (!email || !pwd) { errorDiv.innerText = "Email et mot de passe requis."; return; }
+    if (!email || !pwd) { errorDiv.textContent = "Email et mot de passe requis."; return; }
     try {
       const cred = await auth.signInWithEmailAndPassword(email, pwd);
       await setSessionExpiry(cred.user, 3);
-    } catch (err) { errorDiv.innerText = err.message; }
+    } catch (err) { errorDiv.textContent = err.message; }
   };
 
+  // Toggle auth forms
   document.getElementById('showSignupLink').onclick = (e) => { e.preventDefault(); loginPanel.style.display = 'none'; signupPanel.style.display = 'block'; };
   document.getElementById('showLoginLink').onclick = (e) => { e.preventDefault(); signupPanel.style.display = 'none'; loginPanel.style.display = 'block'; };
 
+  // FAQ accordion (safe)
   document.querySelectorAll('.faq-question').forEach(q => {
     q.addEventListener('click', () => {
       const parent = q.parentElement;
@@ -347,6 +369,7 @@
     });
   });
 
+  // Auth state handler
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       const valid = await isSessionValid(user);
